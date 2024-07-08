@@ -1,0 +1,134 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+
+// Expense class to represent each expense entry
+class Expense {
+    private int id;
+    private String category;
+    private String description;
+    private double amount;
+
+    public Expense(int id, String category, String description, double amount) {
+        this.id = id;
+        this.category = category;
+        this.description = description;
+        this.amount = amount;
+    }
+
+    // Getters
+    public int getId() {
+        return id;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    @Override
+    public String toString() {
+        return "Expense{" +
+                "id=" + id +
+                ", category='" + category + '\'' +
+                ", description='" + description + '\'' +
+                ", amount=" + amount +
+                '}';
+    }
+}
+
+// ExpenseTracker class to manage expenses
+public class ExpenseTracker {
+    private Map<Integer, Expense> expensesMap;
+    private int nextExpenseId;
+
+    public ExpenseTracker() {
+        expensesMap = new HashMap<>();
+        nextExpenseId = 1; // Starting ID for expenses
+    }
+
+    // Method to add a new expense
+    public void addExpense(String category, String description, double amount) {
+        Expense expense = new Expense(nextExpenseId, category, description, amount);
+        expensesMap.put(nextExpenseId, expense);
+        nextExpenseId++;
+    }
+
+    // Method to print all expenses
+    public void listAllExpenses() {
+        if (expensesMap.isEmpty()) {
+            System.out.println("No expenses recorded yet.");
+        } else {
+            System.out.println("List of all expenses:");
+            for (Expense expense : expensesMap.values()) {
+                System.out.println(expense);
+            }
+        }
+    }
+
+    // Method to calculate total expenses
+    public double calculateTotalExpenses() {
+        double total = 0;
+        for (Expense expense : expensesMap.values()) {
+            total += expense.getAmount();
+        }
+        return total;
+    }
+
+    public static void main(String[] args) {
+        ExpenseTracker tracker = new ExpenseTracker();
+        Scanner scanner = new Scanner(System.in);
+
+        boolean exit = false;
+        while (!exit) {
+            System.out.println("\nExpense Tracker Menu:");
+            System.out.println("1. Add Expense");
+            System.out.println("2. List All Expenses");
+            System.out.println("3. Calculate Total Expenses");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline left-over
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter category: ");
+                    String category = scanner.nextLine();
+                    System.out.print("Enter description: ");
+                    String description = scanner.nextLine();
+                    System.out.print("Enter amount: ");
+                    double amount = scanner.nextDouble();
+                    tracker.addExpense(category, description, amount);
+                    System.out.println("Expense added successfully.");
+                    break;
+                case 2:
+                    tracker.listAllExpenses();
+                    break;
+                case 3:
+                    double totalExpenses = tracker.calculateTotalExpenses();
+                    System.out.println("Total expenses: $" + totalExpenses);
+                    break;
+                case 4:
+                    exit = true;
+                    System.out.println("Exiting Expense Tracker. Goodbye!");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please enter a number between 1 and 4.");
+            }
+        }
+
+        scanner.close();
+    }
+}
+
+
